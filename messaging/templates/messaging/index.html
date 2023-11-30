@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Inbox</h2>
+    {% if received_messages %}
+        <ul>
+            {% for message in received_messages %}
+                <li>
+                    <a href="{% url 'messaging:message_thread' message.id %}">
+                        {{ message.subject }}
+                    </a>
+                    {% if not message.is_read %}
+                        <span class="badge bg-primary">Unread</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No messages in your inbox.</p>
+    {% endif %}
+{% endblock %}

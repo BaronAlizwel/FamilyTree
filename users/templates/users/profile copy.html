@@ -1,0 +1,106 @@
+{% extends 'base_generic.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow mb-5">
+                <div class="card-body text-center">
+                    <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s profile picture" class="card-img-top rounded-circle img-fluid mx-auto d-block" style="width: 200px; height: 200px;">
+                    <h3 class="card-title mt-4">{{ user.username|title }}</h3>
+                    <a href="https://www.linkedin.com/in/{{ user.username }}" class="btn btn-primary linkedin-btn mt-4"><i class="fab fa-linkedin-in"></i> View Profile</a>
+                </div>
+            </div>
+            {% if user.interests %}
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h4 class="card-title"><i class="fas fa-grin-stars"></i> Interests</h4>
+                    <p class="card-text">{{ user.interests }}</p>
+                </div>
+            </div>
+            {% endif %}
+            {% if user.hobbies %}
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h4 class="card-title"><i class="fas fa-gamepad"></i> Hobbies</h4>
+                    <p class="card-text">{{ user.hobbies }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <h2 class="card-title"><i class="fas fa-user"></i> About {{ user.username }}</h2>
+                    <p class="card-text"><i>{{ user.bio }}</i></p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="card-title"><i class="fas fa-address-book"></i> Contact</h3>
+                            <ul class="list-unstyled mb-0">
+                                <li><i class="fas fa-envelope"></i> <b>Email:</b> {{ user.email }}</li>
+                                <li><i class="fas fa-phone"></i> <b>Phone:</b> {{ user.phone_number }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="card-title"><i class="fas fa-map-marker-alt"></i> Location</h3>
+                            <p class="card-text">{{ user.location }}</p>
+                            <h3 class="card-title"><i class="fas fa-birthday-cake"></i> Birthday</h3>
+                            <p class="card-text">{{ user.birth_date }}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <h3 class="card-title"><i class="fas fa-user-shield"></i> Profile Visibility</h3>
+                    <p class="card-text">
+                        {% if user.is_public %}
+                        <span class="badge bg-success">Public</span>
+                        {% else %}
+                        <span class="badge bg-danger">Private</span>
+                        {% endif %}
+                    </p>
+                    <hr>
+                    
+                    {% comment %} <h3 class="card-title"><i class="fas fa-user-friends"></i> Connection Requests</h3>
+                    <ul class="list-group mb-4">
+                        {% for request in user.received_connection_requests.all %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ request.from_user.username }} sent you a connection request.
+                            <span>
+                                <a href="{% url 'accept_connection_request' request.id %}" class="btn btn-sm btn-success">Accept</a>
+                                <a href="{% url 'decline_connection_request' request.id %}" class="btn btn-sm btn-danger">Decline</a>
+                            </span>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">No connection requests</li>
+                        {% endfor %}
+                    </ul>
+                    <hr>
+                    <h3 class="card-title"><i class="fas fa-users"></i> Connections</h3>
+                    <ul class="list-group mb-4">
+                        {% for connection in user.connections.all %}
+                        <li class="list-group-item">{{ connection.to_user.username }}</li>
+                        {% empty %}
+                        <li class="list-group-item">No connections yet</li>
+                        {% endfor %}
+                    </ul> {% endcomment %}
+
+                    <hr>
+                    <h3 class="card-title"><i class="fas fa-bell"></i> Notifications</h3>
+                    <ul class="list-group">
+                        {% for notification in user.notifications.all %}
+                        <li class="list-group-item{% if not notification.is_read %} bg-light{% endif %}">{{ notification.message }}</li>
+                        {% empty %}
+                        <li class="list-group-item">No notifications</li>
+                        {% endfor %}
+                    </ul>
+                    <hr>
+                    <a href="{% url 'edit_profile' user.pk %}" class="btn btn-primary btn-edit-profile mt-4"><i class="fas fa-user-edit"></i> Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

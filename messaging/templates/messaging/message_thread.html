@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ message.subject }}</h2>
+    <p>From: {{ message.sender.username }}</p>
+    <p>To: {{ message.recipient.username }}</p>
+    <p>{{ message.body }}</p>
+    {% if not message.is_read and request.user == message.recipient %}
+        <p>This message is unread.</p>
+    {% endif %}
+{% endblock %}

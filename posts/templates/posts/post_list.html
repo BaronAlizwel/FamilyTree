@@ -1,0 +1,92 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Post List</h1>
+  <div class="mb-3">
+    <a href="{% url 'posts:create_post' %}" class="btn btn-primary">New Post</a>
+  </div>
+  <div class="list-group">
+    {% for post in page_obj %}
+      <div class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <img src="{{ post.user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle mr-2" style="width: 40px; height: 40px;">
+            <h5 class="mb-1"><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></h5>
+            <span class="badge bg-secondary ml-2">{{ post.type }}</span>
+          </div>
+          <div class="post-meta">
+            <span class="mr-2"><strong>By:</strong> <a href="{% url 'profile' user_id=post.user.id %}">{{ post.user.username }}</a></span>
+            <span><strong>Posted on:</strong> {{ post.created_at }}</span>
+          </div>
+        </div>
+        <div class="post-actions mt-2">
+          <span class="mr-2">
+            {% if user.is_authenticated %}
+              <button class="btn btn-sm btn-success mr-2" onclick="likePost('{{ post.id }}')">
+                Like
+              </button>
+              <button class="btn btn-sm btn-danger mr-2" onclick="dislikePost('{{ post.id }}')">
+                Dislike
+              </button>
+            {% endif %}
+          </span>
+          <span class="mr-2">Likes: {{ post.likes.count }}</span>
+          <span class="mr-2">Dislikes: {{ post.dislikes.count }}</span>
+        </div>
+      </div>
+    {% empty %}
+      <p>No posts available.</p>
+    {% endfor %}
+  </div>
+
+  {% if page_obj.has_other_pages %}
+    <hr class="mt-5">
+    <div class="pagination-container sticky-bottom">
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-end">
+          {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+          {% endif %}
+          {% for page in page_obj.paginator.page_range %}
+            {% if page_obj.number == page %}
+              <li class="page-item active"><span class="page-link">{{ page }}</span></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+          {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block script %}
+  <script>
+    function likePost(postId) {
+      fetch('{% url 'posts:like_post' post_id='{}' %}'.replace('{}', postId), { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('like-btn').innerText = data.likes_count > 0 ? 'Liked' : 'Like';
+          document.getElementById('dislike-btn').disabled = data.likes_count > 0;
+          document.getElementById('like-count').innerText = data.likes_count;
+        });
+    }
+
+    function dislikePost(postId) {
+      fetch('{% url 'posts:dislike_post' post_id='{}' %}'.replace('{}', postId), { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('dislike-btn').innerText = data.dislikes_count > 0 ? 'Disliked' : 'Dislike';
+          document.getElementById('like-btn').disabled = data.dislikes_count > 0;
+          document.getElementById('dislike-count').innerText = data.dislikes_count;
+        });
+    }
+  </script>
+{% endblock %}

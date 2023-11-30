@@ -1,0 +1,113 @@
+{% extends 'base_generic.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+  <h1 class="h3 mb-4 text-gray-800">Dashboard</h1>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h2 class="m-0 font-weight-bold text-primary"><i class="fas fa-user-friends"></i> Connection Requests</h2>
+        </div>
+        <div class="card-body">
+          {% if connection_requests %}
+            <ul class="list-group list-group-flush">
+              {% for request in connection_requests %}
+                <li class="list-group-item">
+                  <div class="media">
+                    <img src="{{ request.from_user.profile_picture }}" class="mr-3 rounded-circle" alt="{{ request.from_user.username }}">
+                    <div class="media-body">
+                      <h5 class="mt-0 mb-1">{{ request.from_user.username }}</h5>
+                      <p><i class="fas fa-envelope"></i> {{ request.from_user.email }}</p>
+                      <p><i class="fas fa-comment-dots"></i> {{ request.message }}</p>
+                    </div>
+                  </div>
+                </li>
+              {% empty %}
+                <li class="list-group-item text-muted">No pending connection requests</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted">No pending connection requests</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h2 class="m-0 font-weight-bold text-primary"><i class="fas fa-bell"></i> Notifications</h2>
+        </div>
+        <div class="card-body">
+          {% if notifications %}
+            <ul class="list-group list-group-flush">
+              {% for notification in notifications %}
+                <li class="list-group-item">
+                  <h5 class="mt-0 mb-1">{{ notification.message }}</h5>
+                  <p><i class="fas fa-clock"></i> {{ notification.created_at }}</p>
+                </li>
+              {% empty %}
+                <li class="list-group-item text-muted">No new notifications</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted">No new notifications</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h2 class="m-0 font-weight-bold text-primary"><i class="fas fa-users"></i> Recently Connected Users</h2>
+        </div>
+        <div class="card-body">
+          {% if recently_connected_users %}
+            <ul class="list-group list-group-flush">
+              {% for connection in recently_connected_users %}
+                <li class="list-group-item">
+                  <h5 class="mt-0 mb-1">{{ connection.to_user.username }}</h5>
+                  <p><i class="fas fa-clock"></i> {{ connection.created_at }}</p>
+                </li>
+              {% empty %}
+                <li class="list-group-item text-muted">No recently connected users</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted">No recently connected users</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h2 class="m-0 font-weight-bold text-primary"><i class="fas fa-chart-bar"></i> Progress</h2>
+        </div>
+        <div class="card-body">
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+              <span class="progress-bar-text">0% Complete</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary mt-3">Reset Progress</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

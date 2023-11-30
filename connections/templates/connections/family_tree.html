@@ -1,0 +1,8 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Your Family Tree</h2>
+  <div>
+    {% include 'connections/family_tree_node.html' with node=family_tree %}
+  </div>
+{% endblock %}

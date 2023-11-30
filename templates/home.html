@@ -1,0 +1,109 @@
+{% extends 'base_generic.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="display-4">Welcome to FamilyTree!</h1>
+      {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}! Let's explore your family roots together.</p>
+      {% else %}
+        <p>Join us today and <a href="{% url 'account_signup' %}">begin your journey</a> into the past or <a href="{% url 'account_login' %}">log in</a> to continue.</p>
+      {% endif %}
+      <hr>
+      <p>Uncover your roots, connect with your distant relatives, and create a repository of cherished memories and experiences that define your family's unique story.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-6">
+      <img src="{% static 'carousels/1.jpg' %}" class="img-fluid rounded" alt="Family tree">
+    </div>
+    <div class="col-md-6">
+      <h2>Embark on a journey into your past</h2>
+      <p>Delve into your family's history with FamilyTree. Creating an account allows you to discover your ancestral lineage and connect with relatives who are also using our platform.</p>
+      <a class="btn btn-primary" href="#">Begin Journey</a>
+      <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#journeyModal">Learn more</button>
+    </div>
+  </div>
+
+  <hr class="mt-5">
+
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Forge meaningful connections</h2>
+      <p>Strengthen family bonds and make meaningful connections. Find and reach out to distant relatives and share fascinating stories, photos, and documents that create a collective family memory.</p>
+      <a class="btn btn-primary" href="#">Connect with relatives</a>
+      <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#connectionsModal">Learn more</button>
+
+    </div>
+    <div class="col-md-6">
+      <h2>Preserve and share treasured memories</h2>
+      <p>Create a living legacy of your family's memories with FamilyTree. Craft beautiful albums, write captivating stories, upload videos, and share these cherished moments with your family members.</p>
+      <a class="btn btn-primary" href="#">Share memories</a>
+      <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#memoriesModal">Learn more</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Journey Modal -->
+<div class="modal fade" id="journeyModal" tabindex="-1" aria-labelledby="journeyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="journeyModalLabel">Journey Into Your Past</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Insert more detailed information about the journey into the past here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Connections Modal -->
+<div class="modal fade" id="connectionsModal" tabindex="-1" aria-labelledby="connectionsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="connectionsModalLabel">Forge Meaningful Connections</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Insert more detailed information about forging connections here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Memories Modal -->
+<div class="modal fade" id="memoriesModal" tabindex="-1" aria-labelledby="memoriesModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="memoriesModalLabel">Preserve and Share Treasured Memories</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Insert more detailed information about sharing memories here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

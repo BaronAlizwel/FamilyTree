@@ -1,0 +1,25 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <h1>Search Users</h1>
+    <form method="GET">
+        <input type="text" name="q" placeholder="Search Users" value="{{ request.GET.q }}">
+        <input type="submit" value="Search">
+    </form>
+
+    {% if users %}
+    <h2>Search Results</h2>
+    <ul>
+        {% for user in users %}
+            <li>
+                <a href="{% url 'user_detail' user.id %}">{{ user.username }}</a>
+                <!-- Add other user details you want to display here -->
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        {% if request.GET.q %}
+            <p>No users found with your query.</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

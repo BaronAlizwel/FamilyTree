@@ -1,0 +1,17 @@
+<ul class="family-tree">
+    <li class="family-tree-node">
+        <div class="family-tree-node-info">
+            <span class="username">{{ node.user.username }}</span>
+            <span class="relationship-type">{{ node.get_relationship_type_display }}</span>
+        </div>
+        {% if node.children %}
+        <ul class="family-tree-children list-unstyled">
+            {% for child_node in node.children %}
+            <li class="family-tree-child">
+                {% include 'connections/family_tree_node.html' with node=child_node %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
+</ul>

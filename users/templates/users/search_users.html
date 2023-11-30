@@ -1,0 +1,35 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Search Users</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <form method="GET">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="username" placeholder="Search Users" value="{{ request.GET.username }}">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {% if users %}
+                <ul class="list-group">
+                    {% for user in users %}
+                        <li class="list-group-item">
+                            <a href="{% url 'user_detail' user.id %}">{{ user.username }}</a>
+                            <!-- Add other user details you want to display here -->
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No users found</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No users found</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Conversation</h2>
+  {% for message in messages %}
+    <div>
+      <h3>{{ message.sender.username }}</h3>
+      <p>{{ message.text }}</p>
+      <p>{{ message.sent_at }}</p>
+    </div>
+  {% empty %}
+    <p>No messages.</p>
+  {% endfor %}
+{% endblock %}

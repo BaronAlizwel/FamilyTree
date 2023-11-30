@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>FamilyTree</title>
+    <style>
+
+      {% comment %}       
+      .sidebar {
+        background-color: black;
+        color: white;
+        height: 100vh;
+        padding-top: 20px;
+      } {% endcomment %}
+      
+       .sidebar {
+        background-image: url("{% static 'carousels/sidebar_bg.jpg' %}");
+        background-size: fill;
+        height: 100vh;
+        padding-top: 20px;
+        position: fixed;
+        width: 24%; /* adjust the width as needed */
+       }
+
+
+        {% comment %} .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        } {% endcomment %}
+        
+        @media (max-width: 768px) {
+          .sidebar {
+            position: relative;
+            height: auto;
+          }
+        }
+
+        
+
+    {% comment %} .sidebar {
+      background-image: url("{% static 'carousels/sidebar_bg.jpg' %}");
+      background-size: fill;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 24%; /* adjust the width as needed */
+      overflow-y: auto;
+      padding: 20px;
+  } {% endcomment %}
+
+
+  
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .sidebar li {
+        margin-bottom: 10px;
+    }
+
+    .sidebar a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .sidebar a:hover {
+        color: lightgray;
+    }
+
+    .sidebar .nav-link {
+      color: white;
+  }
+  
+  .sidebar .nav-link.active {
+      color: #007bff;
+  }
+
+    
+    body {
+      background: url("{% static 'carousels/profiles_bg.png' %}") no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+  }
+        
+  .profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profile-details {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 0;
+    overflow: hidden;
+    margin-right: 20px;
+    object-fit: cover;
+  }
+  
+
+  .profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profile-info h2 {
+    margin-top: 20px;
+  }
+  
+  .profile-info p {
+    margin-bottom: 10px;
+  }
+  
+  .profile-info a {
+    margin-right: 10px;
+  }
+ 
+
+
+  .unread {
+    font-weight: bold;
+    color: #333;
+  }
+      
+    </style>
+</head>
+<body>
+
+  {% if user.is_authenticated %}
+
+  {% include 'navigation_bar.html' %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                {% include 'sidebar.html' %}
+            </div>
+            <div class="col-md-9">
+                {% block content %}
+                    <h2>User Activity Log</h2>
+                    <ul>
+                        {% for activity in user.activities.all %}
+                            <li>{{ activity.activity_type }} - {{ activity.timestamp }}</li>
+                        {% empty %}
+                            <li>No activities to display.</li>
+                        {% endfor %}
+                    </ul>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                {% block content_l %}
+                
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

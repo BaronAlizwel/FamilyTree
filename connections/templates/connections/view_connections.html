@@ -1,0 +1,37 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <h1>My Connections</h1>
+
+    <h2>Connection Requests</h2>
+    {% if connection_requests %}
+        <ul>
+            {% for request in connection_requests %}
+                <li>
+                    <p>{{ request.from_user.username }} sent you a connection request.</p>
+                    <form method="post" action="{% url 'accept_connection_request' request.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Accept</button>
+                    </form>
+                    <form method="post" action="{% url 'decline_connection_request' request.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Decline</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No connection requests.</p>
+    {% endif %}
+
+    <h2>My Connections</h2>
+    {% if connections %}
+        <ul>
+            {% for connection in connections %}
+                <li>{{ connection.to_user.username }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No connections yet.</p>
+    {% endif %}
+{% endblock %}

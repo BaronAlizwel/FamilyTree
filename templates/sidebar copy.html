@@ -1,0 +1,47 @@
+{% block sidebar %}
+    <div class="offcanvas offcanvas-start sidebar" tabindex="-1" id="sidebar">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt" style="margin-right: 5px;"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile' %}"><i class="fas fa-user" style="margin-right: 5px;"></i> Profile</a>
+                </li>
+                {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'edit_profile' user.pk %}"><i class="fas fa-user-edit" style="margin-right: 5px;"></i> Edit Profile</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'search_users' %}"><i class="fas fa-search" style="margin-right: 5px;"></i> Search Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_family_tree' %}"><i class="fas fa-tree" style="margin-right: 5px;"></i> View Family Tree</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'user_detail' user.pk %}"><i class="fas fa-info-circle" style="margin-right: 5px;"></i> User Detail</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_other_profile' %}"><i class="fas fa-users" style="margin-right: 5px;"></i> View Other Profile</a>
+                </li>
+
+                <hr>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_connection' %}"><i class="fas fa-link" style="margin-right: 5px;"></i> Create Connection</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_connections' %}"><i class="fas fa-users" style="margin-right: 5px;"></i> View Connections</a>
+                </li>
+            </ul>    
+        </div>
+    </div>
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+        Toggle Menu
+    </button>
+{% endblock %}

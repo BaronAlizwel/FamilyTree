@@ -1,0 +1,119 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg p-4 mb-5 bg-white rounded">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Post Detail</h2>
+          <div class="post-detail">
+            <h3>{{ post.title }}</h3>
+            <p>By: {{ post.user.username }}</p>
+            <p>{{ post.content }}</p>
+            <p>Likes: <span id="like-count">{{ post.likes.count }}</span></p>
+            <p>Dislikes: <span id="dislike-count">{{ post.dislikes.count }}</span></p>
+            {% if user.is_authenticated %}
+              {% if user in post.likes.all %}
+                <button id="like-btn" class="btn btn-success" disabled>Liked</button>
+              {% else %}
+                <button id="like-btn" class="btn btn-outline-success" onclick="likePost('{{ post.id }}')">Like</button>
+              {% endif %}
+              {% if user in post.dislikes.all %}
+                <button id="dislike-btn" class="btn btn-danger" disabled>Disliked</button>
+              {% else %}
+                <button id="dislike-btn" class="btn btn-outline-danger" onclick="dislikePost('{{ post.id }}')">Dislike</button>
+              {% endif %}
+            {% endif %}
+          </div>
+
+          <hr>
+
+          <h2>Comments</h2>
+          <div id="comments">
+            {% for comment in post.comments.all %}
+              <div class="comment">
+                <p class="comment-user">Comment by: {{ comment.user.username }}</p>
+                <p class="comment-text">{{ comment.text }}</p>
+                <p class="comment-timestamp">Posted on: {{ comment.created_at }}</p>
+              </div>
+            {% empty %}
+              <p>No comments yet.</p>
+            {% endfor %}
+          </div>
+
+          <hr>
+
+          {% if user.is_authenticated %}
+            <h2>Add a Comment</h2>
+            <form id="comment-form" method="POST" action="{% url 'posts:add_comment' post_id=post.id %}">
+              {% csrf_token %}
+              <div class="form-group">
+                {{ comment_form.comment.label_tag }}
+                {{ comment_form.comment }}
+                {{ comment_form.comment.errors }}
+              </div>
+              <button type="submit" class="btn btn-primary">Post Comment</button>
+            </form>
+          {% else %}
+            <p>Please log in to add a comment.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    function likePost(postId) {
+      fetch('{% url 'posts:like_post' post_id='{}' %}'.replace('{}', postId), { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+          const likeBtn = document.getElementById('like-btn');
+          const dislikeBtn = document.getElementById('dislike-btn');
+          likeBtn.innerText = data.likes_count > 0 ? 'Liked' : 'Like';
+          dislikeBtn.disabled = data.likes_count > 0;
+          document.getElementById('like-count').innerText = data.likes_count;
+        });
+    }
+
+    function dislikePost(postId) {
+      fetch('{% url 'posts:dislike_post' post_id='{}' %}'.replace('{}', postId), { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+          const likeBtn = document.getElementById('like-btn');
+          const dislikeBtn = document.getElementById('dislike-btn');
+          dislikeBtn.innerText = data.dislikes_count > 0 ? 'Disliked' : 'Dislike';
+          likeBtn.disabled = data.dislikes_count > 0;
+          document.getElementById('dislike-count').innerText = data.dislikes_count;
+        });
+    }
+
+    document.getElementById('comment-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      fetch(form.action, {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const comment = data.comment;
+            const commentHTML = `
+              <div class="comment">
+                <p class="comment-user">Comment by: ${comment.user}</p>
+                <p class="comment-text">${comment.text}</p>
+                <p class="comment-timestamp">Posted on: ${comment.created_at}</p>
+              </div>
+            `;
+            document.getElementById('comments').innerHTML += commentHTML;
+            document.getElementById('comment-form').reset();
+          }
+        });
+    });
+  </script>
+{% endblock %}
